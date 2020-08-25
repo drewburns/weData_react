@@ -2,24 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import "./index.css";
-import Login from "./screens/Login";
-import SignUp from "./screens/SignUp";
-import Home from "./screens/Home";
-import Dashboard from "./screens/Dashboard";
-import ProtectedRoute from "./utility/ProtectedRoute";
+import App from "./App";
 import { GlobalContextProvider } from "./utility/GlobalContext";
 import * as serviceWorker from "./serviceWorker";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
   <BrowserRouter>
     <GlobalContextProvider>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={SignUp} />
-        <ProtectedRoute exact={true} path="/dashboard" component={Dashboard} />
-        {/* <ProtectedRoute component={Dashboard} /> */}
-      </Switch>
+      <App />
     </GlobalContextProvider>
   </BrowserRouter>,
   document.getElementById("root")
