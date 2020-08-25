@@ -15,6 +15,9 @@ import ProjectHome from "./screens/project/ProjectHome";
 import DashboardHeader from './containers/DashboardHeader';
 import HomeHeader from './containers/HomeHeader';
 
+import DashboardHeader from './containers/DashboardHeader';
+import HomeHeader from './containers/HomeHeader';
+
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
 
@@ -54,7 +57,7 @@ export default function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
-          <ProtectedRoute
+          <Route
             exact={true}
             path="/dashboard"
             component={Dashboard}
