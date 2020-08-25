@@ -14,12 +14,14 @@ const GlobalContextProvider = (props) => {
 
   useEffect(() => {
     (async () => {
+      console.log("doing this!");
       // await AsyncStorage.removeItem("id_token");
       const value = localStorage.getItem("id_token");
-      // console.log(value)
+    //   console.log(value)
       if (value !== null) {
         const decodedToken = jwtDecode(value, { header: false });
-        const currentUserID = decodedToken.sub;
+        console.log(decodedToken)
+        const currentUserID = decodedToken.id;
         setState({
           jwt: value,
           user: {},

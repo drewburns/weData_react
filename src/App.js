@@ -4,6 +4,7 @@ import { Route, BrowserRouter, Switch, Link } from "react-router-dom";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
 import Home from "./screens/Home";
+import AuthService from "./services/authService";
 import Dashboard from "./screens/dashboard/Dashboard";
 import ProtectedRoute from "./utility/ProtectedRoute";
 import { GlobalContext } from "./utility/GlobalContext";
@@ -12,8 +13,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
 
+  console.log(state);
   const logOut = () => {
-    // AuthService.logout();
+    AuthService.logout();
   };
   return (
     <div>
@@ -41,7 +43,7 @@ export default function App() {
           <div className="navbar-nav ml-auto">
             <li className="nav-item">
               <Link to={"/profile"} className="nav-link">
-                {state.user.email}
+                Profile
               </Link>
             </li>
             <li className="nav-item">
