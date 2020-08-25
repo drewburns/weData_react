@@ -4,7 +4,7 @@ import { Route, BrowserRouter, Switch, Link } from "react-router-dom";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
 import Home from "./screens/Home";
-import Dashboard from "./screens/Dashboard";
+import Dashboard from "./screens/dashboard/Dashboard";
 import ProtectedRoute from "./utility/ProtectedRoute";
 import { GlobalContext } from "./utility/GlobalContext";
 import "bootstrap/dist/css/bootstrap.min.css";
