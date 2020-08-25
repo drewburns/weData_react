@@ -7,7 +7,16 @@ const GlobalContext = React
   //   (null as unknown) as ContextProps
   ();
 
-const initialState = { jwt: "", loading: true, user: {}, currentUserID: null };
+const initialState = { 
+                    jwt: "", 
+                    loading: false, 
+                    user: {}, 
+                    currentUserID: null,
+                    drawer:{
+                      isOpen: false,
+                    },
+                    isLoading: false,
+                  };
 
 const GlobalContextProvider = (props) => {
   const [state, setState] = useState(initialState);
@@ -20,13 +29,13 @@ const GlobalContextProvider = (props) => {
         const decodedToken = jwtDecode(value, { header: false });
         const currentUserID = decodedToken.id;
         setState({
+          ...state,
           jwt: value,
-          user: {},
-          loading: false,
           currentUserID: currentUserID,
         });
       } else {
         setState({
+          ...state,
           loading: false,
         });
       }
