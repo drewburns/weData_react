@@ -9,6 +9,9 @@ import ProtectedRoute from "./utility/ProtectedRoute";
 import { GlobalContext } from "./utility/GlobalContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import DashboardHeader from './containers/DashboardHeader';
+import HomeHeader from './containers/HomeHeader';
+
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
 
@@ -17,7 +20,7 @@ export default function App() {
   };
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
+      {/* <nav className="navbar navbar-expand navbar-dark bg-dark">
         <Link to={"/"} className="navbar-brand">
           WeData
         </Link>
@@ -35,50 +38,25 @@ export default function App() {
               </Link>
             </li>
           )}
-        </div>
+        </div> */}
 
-        {state.currentUserID ? (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/profile"} className="nav-link">
-                {state.user.email}
-              </Link>
-            </li>
-            <li className="nav-item">
-              <a href="/login" className="nav-link" onClick={logOut}>
-                LogOut
-              </a>
-            </li>
-          </div>
+        {1 ? (
+          <DashboardHeader/>
         ) : (
-          <div className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link to={"/signup"} className="nav-link">
-                Sign Up
-              </Link>
-            </li>
-          </div>
+          <HomeHeader/>
         )}
-      </nav>
-      <div className="container mt-3">
+      {/* </nav> */}
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
-          <ProtectedRoute
+          <Route
             exact={true}
             path="/dashboard"
             component={Dashboard}
           />
           {/* <ProtectedRoute component={Dashboard} /> */}
         </Switch>
-      </div>
     </div>
   );
 }

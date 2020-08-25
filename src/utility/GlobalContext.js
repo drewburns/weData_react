@@ -7,7 +7,15 @@ const GlobalContext = React
   //   (null as unknown) as ContextProps
   ();
 
-const initialState = { jwt: "", loading: false, user: {}, currentUserID: null };
+const initialState = { 
+                    jwt: "", 
+                    loading: false, 
+                    user: {}, 
+                    currentUserID: 1,
+                    drawer:{
+                      isOpen: false,
+                    }
+                  };
 
 const GlobalContextProvider = (props) => {
   const [state, setState] = useState(initialState);
