@@ -13,7 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
 
-  console.log(state);
+  // console.log(state);
   const logOut = () => {
     AuthService.logout();
   };
@@ -29,14 +29,6 @@ export default function App() {
               Home
             </Link>
           </li>
-
-          {state.currentUserID && (
-            <li className="nav-item">
-              <Link to={"/user"} className="nav-link">
-                User
-              </Link>
-            </li>
-          )}
         </div>
 
         {state.currentUserID ? (

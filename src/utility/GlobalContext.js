@@ -7,20 +7,17 @@ const GlobalContext = React
   //   (null as unknown) as ContextProps
   ();
 
-const initialState = { jwt: "", loading: false, user: {}, currentUserID: null };
+const initialState = { jwt: "", loading: true, user: {}, currentUserID: null };
 
 const GlobalContextProvider = (props) => {
   const [state, setState] = useState(initialState);
 
   useEffect(() => {
     (async () => {
-      console.log("doing this!");
       // await AsyncStorage.removeItem("id_token");
       const value = localStorage.getItem("id_token");
-    //   console.log(value)
       if (value !== null) {
         const decodedToken = jwtDecode(value, { header: false });
-        console.log(decodedToken)
         const currentUserID = decodedToken.id;
         setState({
           jwt: value,

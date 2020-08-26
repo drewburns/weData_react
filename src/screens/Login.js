@@ -55,7 +55,7 @@ const Login = (props) => {
           localStorage.setItem("id_token", response.data.token);
           props.history.push("/dashboard");
           console.log("logged in!");
-          window.location.reload();
+          // window.location.reload();
         })
         .catch((error) => {
           console.log(error);

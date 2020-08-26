@@ -1,18 +1,13 @@
-import React from 'react'
-import { Redirect } from 'react-router-dom'
-
-class ProtectedRoute extends React.Component {
-
-    render() {
-        const Component = this.props.component;
-        const isAuthenticated = true;
-       
-        return isAuthenticated ? (
-            <Component />
-        ) : (
-            <Redirect to={{ pathname: '/login' }} />
-        );
-    }
-}
+import React, { useContext } from "react";
+import { Redirect } from "react-router-dom";
+import { GlobalContext } from "./GlobalContext";
+const ProtectedRoute = (props) => {
+//   const { state, setState } = useContext(GlobalContext);
+//   console.log("state!");
+  const jwt = localStorage.getItem("id_token");
+//   console.log(jwt);
+  const Component = props.component
+  return jwt ? <Component /> : <Redirect to={{ pathname: "/login" }} />;
+};
 
 export default ProtectedRoute;
