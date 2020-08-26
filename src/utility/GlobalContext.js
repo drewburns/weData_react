@@ -16,6 +16,11 @@ const initialState = {
                       isOpen: false,
                     },
                     isLoading: false,
+                    alert:{
+                      message: "",
+                      type: "",
+                      isAlert: false
+                    }
                   };
 
 const GlobalContextProvider = (props) => {

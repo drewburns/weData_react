@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 import React, { useState, useRef, useContext } from "react";
 import { GlobalContext } from "../utility/GlobalContext";
 
 import AuthService from "../services/authService";
 
-=======
-import React from 'react';
->>>>>>> efef4b8029814de871a04b9441c9e8de688a38f5
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -61,40 +57,34 @@ const Login = (props) => {
     // form.current.validateAll();
 
     // if (checkBtn.current.context._errors.length === 0) {
-      AuthService.login(loginInfo.email, loginInfo.password)
-        .then((response) => {
+    AuthService.login(loginInfo.email, loginInfo.password)
+      .then((response) => {
+        setState({
+          ...state,
+          user: response.data.user,
+          jwt: response.data.token,
+          currentUserID: response.data.user.id,
+        });
+        localStorage.setItem("id_token", response.data.token);
+        props.history.push("/dashboard");
+        console.log("logged in!");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
           setState({
             ...state,
-            user: response.data.user,
-            jwt: response.data.token,
-            currentUserID: response.data.user.id,
-          });
-          localStorage.setItem("id_token", response.data.token);
-          props.history.push("/dashboard");
-          console.log("logged in!");
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
-            setState({
-              ...state,
-              isLoading: false,
-            })
-          setMessage(resMessage);
-        });
-    // } else {
-    //   setState({
-    //     ...state,
-    //     isLoading: false,
-    //   })
-    // }
+            isLoading: false,
+          })
+        setMessage(resMessage);
+      });
   };
 
   return (
