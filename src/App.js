@@ -18,6 +18,9 @@ import HomeHeader from './containers/HomeHeader';
 import DashboardHeader from './containers/DashboardHeader';
 import HomeHeader from './containers/HomeHeader';
 
+import Collapse from '@material-ui/core/Collapse';
+import Alert from '@material-ui/lab/Alert';
+
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
 
@@ -47,12 +50,14 @@ export default function App() {
           )}
         </div> */}
 
-        {state.currentUserID ? (
+        {1 ? (
           <DashboardHeader/>
         ) : (
           <HomeHeader/>
         )}
-      {/* </nav> */}
+        <Collapse in={state.alert.isAlert} exit={1000} style={{position:'absolute', width:'100%'}}>
+          <Alert severity={state.alert.type} >{state.alert.message}</Alert>
+        </Collapse>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />

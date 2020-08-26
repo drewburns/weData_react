@@ -57,10 +57,31 @@ const Login = (props) => {
     // form.current.validateAll();
 
     // if (checkBtn.current.context._errors.length === 0) {
-      AuthService.login(loginInfo.email, loginInfo.password)
-        .then((response) => {
+    AuthService.login(loginInfo.email, loginInfo.password)
+      .then((response) => {
+        setState({
+          ...state,
+          user: response.data.user,
+          jwt: response.data.token,
+          currentUserID: response.data.user.id,
+        });
+        localStorage.setItem("id_token", response.data.token);
+        props.history.push("/dashboard");
+        console.log("logged in!");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+
           setState({
             ...state,
+<<<<<<< HEAD
             user: response.data.user,
             jwt: response.data.token,
             currentUserID: response.data.user.id,
@@ -91,6 +112,12 @@ const Login = (props) => {
     //     isLoading: false,
     //   })
     // }
+=======
+            isLoading: false,
+          })
+        setMessage(resMessage);
+      });
+>>>>>>> 25-Aug-2020 10:38 pm, VTurnier
   };
 
   return (
