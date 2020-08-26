@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 import React, { useState, useRef, useContext } from "react";
 import { GlobalContext } from "../utility/GlobalContext";
 
 import AuthService from "../services/authService";
 
+=======
+import React from 'react';
+>>>>>>> efef4b8029814de871a04b9441c9e8de688a38f5
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';

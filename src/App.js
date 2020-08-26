@@ -52,7 +52,7 @@ export default function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
-          <ProtectedRoute
+          <Route
             exact={true}
             path="/dashboard"
             component={Dashboard}
