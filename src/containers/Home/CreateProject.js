@@ -64,6 +64,7 @@ export default function CreateProject(props) {
             type="text"
             className="form-control"
             name="projectName"
+            placeholder={"Project name"}
             value={projectName}
             onChange={onChangeProjectName}
             validations={[required]}
