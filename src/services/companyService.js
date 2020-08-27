@@ -13,6 +13,10 @@ const create = (name, jwt) => {
   );
 };
 
+const getAllCompanies = (jwt) => {
+  const headers = { Authorization: "bearer " + jwt };
+  return axios.get(API_URL + "all", { headers: headers });
+};
 const addMember = (email, company_id, jwt) => {
   const headers = { Authorization: "bearer " + jwt };
   return axios.post(
@@ -39,4 +43,5 @@ export default {
   fetch,
   members,
   addMember,
+  getAllCompanies
 };

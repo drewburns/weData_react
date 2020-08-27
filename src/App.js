@@ -9,6 +9,7 @@ import Dashboard from "./screens/dashboard/Dashboard";
 import ProtectedRoute from "./utility/ProtectedRoute";
 import { GlobalContext } from "./utility/GlobalContext";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css"
 
 export default function App() {
   const { state, setState } = useContext(GlobalContext);

@@ -41,10 +41,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log(state);
+    // console.log("COmpany!", company);
     fetchCompany(state.jwt);
     return () => {
-      console.log("cleanup!");
+      // console.log("cleanup!");
     };
   }, [state]);
 
@@ -91,13 +91,13 @@ export default function Home() {
     setCompanyName(companyName);
   };
 
-  if (loading || state.loading) {
-    return (
-      <div>
-        <h1>Loading</h1>
-      </div>
-    );
-  }
+  // if (loading || state.loading) {
+  //   return (
+  //     <div>
+  //       <h1>Loading</h1>
+  //     </div>
+  //   );
+  // }
   if (!state.jwt) {
     return (
       <div>

@@ -32,7 +32,7 @@ export default function CompanyOverview(props) {
     projectService
       .fetch(jwt)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setProjects(response.data);
         setLoading(false);
       })

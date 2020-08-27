@@ -3,12 +3,13 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import projectService from "../../services/projectService";
+import AddCompanies from "./AddCompanies";
 
 export default function CreateProject(props) {
   const [loading, setLoading] = useState(false);
-  const [companyIds, setCompanyIds] = useState("");
+  const [companyTags, setCompanyTags] = useState([]);
   const [projectName, setProjectName] = useState("");
-
+  //   const [tags, setTags] = useState([]);
   const form = useRef();
   const checkBtn = useRef();
 
@@ -24,13 +25,17 @@ export default function CreateProject(props) {
 
   const createProject = (e) => {
     e.preventDefault();
+    const companyIds = companyTags.map((c) => c.id);
+    if (companyIds.length === 0) {
+      setLoading(false);
+    }
     setLoading(true);
     form.current.validateAll();
     projectService
-      .create(projectName, companyIds.split(","), props.jwt)
+      .create(projectName, companyIds, props.jwt)
       .then((response) => {
         // props.fetch
-        props.fetchProjects()
+        props.fetchProjects();
         setLoading(false);
       })
       .catch((error) => {
@@ -45,10 +50,10 @@ export default function CreateProject(props) {
     setProjectName(name);
   };
 
-  const onChangeCompanyIds = (e) => {
-    const ids = e.target.value;
-    setCompanyIds(ids);
-  };
+  //   const onChangeCompanyIds = (e) => {
+  //     const ids = e.target.value;
+  //     setCompanyIds(ids);
+  //   };
   return (
     <div>
       <h3>Create Project</h3>
@@ -65,15 +70,20 @@ export default function CreateProject(props) {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="username">Companies</label>
-          <Input
+          <label htmlFor="tags">Companies</label>
+          <AddCompanies
+            tags={companyTags}
+            setTags={setCompanyTags}
+            jwt={props.jwt}
+          />
+          {/* <Input
             type="text"
             className="form-control"
             name="companyIds"
             value={companyIds}
             onChange={onChangeCompanyIds}
             validations={[required]}
-          />
+          /> */}
         </div>
 
         <div className="form-group">
