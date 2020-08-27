@@ -9,7 +9,8 @@ import Dashboard from "./screens/dashboard/Dashboard";
 import ProtectedRoute from "./utility/ProtectedRoute";
 import { GlobalContext } from "./utility/GlobalContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css"
+import "./App.css";
+import ProjectHome from "./screens/project/ProjectHome";
 
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
@@ -71,6 +72,7 @@ export default function App() {
             path="/dashboard"
             component={Dashboard}
           />
+          <ProtectedRoute path="/project/:id" component={ProjectHome}/>
           {/* <ProtectedRoute component={Dashboard} /> */}
         </Switch>
       </div>

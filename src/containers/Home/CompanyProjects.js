@@ -3,6 +3,7 @@ import projectService from "../../services/projectService";
 
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
 
 export default function CompanyProjects(props) {
   const listCompanies = (participants) => {
@@ -12,13 +13,15 @@ export default function CompanyProjects(props) {
   };
 
   const listProjects = props.projects.map((project) => (
-      <Grid item xs={6} md={6} lg={6}>
-        {/* <li style={{ listStyleType: "none" }} key={project.id}> */}
+    <Grid item xs={6} md={6} lg={6}>
+      {/* <li style={{ listStyleType: "none" }} key={project.id}> */}
+      <Link to={`project/${project.id}`}>
         <h5>{project.name}</h5>
-        <p>Companies in Project:</p>
-        {listCompanies(project.ProjectParticipants)}
-        {/* </li> */}
-      </Grid>
+      </Link>
+      <p>Companies in Project:</p>
+      {listCompanies(project.ProjectParticipants)}
+      {/* </li> */}
+    </Grid>
   ));
   return (
     <div>
