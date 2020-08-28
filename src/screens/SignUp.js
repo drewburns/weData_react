@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,54 +20,82 @@ import { GlobalContext } from "../utility/GlobalContext";
 import AuthService from "../services/authService";
 
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = signUpStyles();
   const { state, setState } = useContext(GlobalContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const onChangeUsername = (e) => {
-    const email = e.target.value;
-    setEmail(email);
-  };
-
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
-
+  const [newUser, setNewUser] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
+  const handleNewUser=(e)=>{
+    setNewUser({
+      ...newUser,
+      [e.target.name]: e.target.value 
+    })
+  }
   const handleSignUp = (e) => {
     e.preventDefault();
+    setState({
+      ...state,
+      isLoading: true
+    });
 
-    setMessage("");
-    setLoading(true);
+    if(newUser.password === newUser.confirmPassword){
+      AuthService.signup(newUser.email, newUser.password)
+            .then((response) => {
+              setState({
+                user: response.data.user,
+                jwt: response.data.token,
+                currentUserID: response.data.user.id,
+                isLoading: false
+              });
+              localStorage.setItem("id_token", response.data.token);
+              props.history.push("/dashboard");
+              console.log("logged in!");
+            })
+            .catch((error) => {
+              console.log(error);
+              const resMessage =
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
+                error.message ||
+                error.toString();
 
-    AuthService.signup(email, password)
-          .then((response) => {
-            setState({
-              user: response.data.user,
-              jwt: response.data.token,
-              currentUserID: response.data.user.id,
+                setState({
+                  ...state,
+                  isLoading: false,
+                });
+              setTimeout(()=>{
+                setState({
+                  ...state,
+                  alert:{
+                    message: resMessage,
+                    type: "warning",
+                    isAlert: true,
+                }})
+              }, 3000);
             });
-            localStorage.setItem("id_token", response.data.token);
-            props.history.push("/dashboard");
-            console.log("logged in!");
-            // window.location.reload();
-          })
-          .catch((error) => {
-            console.log(error);
-            const resMessage =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.message ||
-              error.toString();
-
-            setLoading(false);
-            setMessage(resMessage);
-          });
+          }
+      else{
+        setState({
+          ...state,
+          alert:{
+            message: "Passwords do not match",
+            type: "warning",
+            isAlert: true,
+        }})
+        setTimeout(()=>{
+          setState({
+            ...state,
+            alert:{
+              message: "",
+              type: "",
+              isAlert: false,
+          }})
+        }, 3000);
+      }
   }
 
   return (
@@ -82,29 +110,6 @@ export default function SignUp() {
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -114,6 +119,8 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                onChange={handleNewUser}
+                value={newUser.email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -126,12 +133,22 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handleNewUser}
+                value={newUser.password}
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="current-password"
+                onChange={handleNewUser}
+                value={newUser.confirmPassword}
               />
             </Grid>
           </Grid>
@@ -141,12 +158,13 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSignUp}
           >
             Sign Up
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
@@ -159,4 +177,4 @@ export default function SignUp() {
     </Container>
   );
 }
-export default SignUp;
+

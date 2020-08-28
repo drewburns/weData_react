@@ -41,14 +41,10 @@ function Copyright() {
 
 export default function Dashboard() {
   const classes = dashboardStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
+    <React.Fragment>
       <CssBaseline />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -71,6 +67,6 @@ export default function Dashboard() {
           </Box>
         </Container>
       </main>
-    </div>
+    </React.Fragment>
   );
 }

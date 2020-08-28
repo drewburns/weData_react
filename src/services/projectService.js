@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/project/";
+const API_URL = "http://localhost:5000/project/";
 
 const create = (name, company_ids, jwt) => {
   const headers = { Authorization: "bearer " + jwt };

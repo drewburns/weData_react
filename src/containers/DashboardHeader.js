@@ -51,24 +51,24 @@ export default function DashboardHeader(props)
                         </Badge>
                     </IconButton>
                 </Toolbar>
-        </AppBar>
-        <Drawer
-        variant="permanent"
-        classes={{
-            paper: clsx(classes.drawerPaper, !state.drawer.isOpen && classes.drawerPaperClose),
-        }}
-        open={state.drawer.isOpen}
-        >
-        <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawer}>
-            <ChevronLeftIcon />
-            </IconButton>
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-        </Drawer>
-    </React.Fragment>
+            </AppBar>
+            {/* <Drawer
+            variant="permanent"
+            classes={{
+                paper: clsx(classes.drawerPaper, !state.drawer.isOpen && classes.drawerPaperClose),
+            }}
+            open={state.drawer.isOpen}
+            >
+                <div className={classes.toolbarIcon}>
+                    <IconButton onClick={handleDrawer}>
+                    <ChevronLeftIcon />
+                    </IconButton>
+                </div>
+                <Divider />
+                <List>{mainListItems}</List>
+                <Divider />
+                <List>{secondaryListItems}</List>
+            </Drawer> */}
+        </React.Fragment>
     )
 }

@@ -19,24 +19,10 @@ import Container from '@material-ui/core/Container';
 import loginStyles from '../styles/login-styles'
 import Copyright from '../containers/Copyright';
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
 const Login = (props) => {
   const classes = loginStyles();
   const { state, setState } = useContext(GlobalContext);
-  const form = useRef();
-  const checkBtn = useRef();
-
   const [loginInfo, setLoginInfo] = useState({email:"", password:""});
-  const [message, setMessage] = useState("");
 
   const onFormChange = (e) => {
     setLoginInfo({
@@ -47,16 +33,11 @@ const Login = (props) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    setMessage("");
     setState({
       ...state,
       isLoading: true,
     })
 
-    // form.current.validateAll();
-
-    // if (checkBtn.current.context._errors.length === 0) {
     AuthService.login(loginInfo.email, loginInfo.password)
       .then((response) => {
         setState({
@@ -81,43 +62,22 @@ const Login = (props) => {
 
           setState({
             ...state,
-<<<<<<< HEAD
-            user: response.data.user,
-            jwt: response.data.token,
-            currentUserID: response.data.user.id,
-          });
-          localStorage.setItem("id_token", response.data.token);
-          props.history.push("/dashboard");
-          console.log("logged in!");
-          // window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-
+            isLoading: false,
+            alert:{
+              message: resMessage,
+              type: "warning",
+              isAlert: true,
+          }})
+          setTimeout(()=>{
             setState({
               ...state,
-              isLoading: false,
-            })
-          setMessage(resMessage);
+              alert:{
+                message: "",
+                type: "",
+                isAlert: false,
+            }})
+          }, 3000);
         });
-    // } else {
-    //   setState({
-    //     ...state,
-    //     isLoading: false,
-    //   })
-    // }
-=======
-            isLoading: false,
-          })
-        setMessage(resMessage);
-      });
->>>>>>> 25-Aug-2020 10:38 pm, VTurnier
   };
 
   return (
@@ -178,7 +138,7 @@ const Login = (props) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
