@@ -18,6 +18,12 @@ import HomeHeader from './containers/HomeHeader';
 import Collapse from '@material-ui/core/Collapse';
 import Alert from '@material-ui/lab/Alert';
 
+import DashboardHeader from './containers/DashboardHeader';
+import HomeHeader from './containers/HomeHeader';
+
+import Collapse from '@material-ui/core/Collapse';
+import Alert from '@material-ui/lab/Alert';
+
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
 
@@ -39,7 +45,7 @@ export default function App() {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={SignUp} />
-          <ProtectedRoute
+          <Route
             exact={true}
             path="/dashboard"
             component={Dashboard}
