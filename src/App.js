@@ -27,7 +27,7 @@ export default function App() {
         </Link>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/home"} className="nav-link">
+            <Link to={"/"} className="nav-link">
               Home
             </Link>
           </li>

@@ -14,6 +14,16 @@ const create = (name, company_ids, jwt) => {
   );
 };
 
+const runQuery = (route) => {
+  return axios.get(route);
+}
+
+const getProject = (id, jwt) => {
+  const headers = { Authorization: "bearer " + jwt };
+  return axios.get(API_URL + id, { headers: headers });
+};
+
+
 const fetch = (jwt) => {
   const headers = { Authorization: "bearer " + jwt };
   return axios.get(API_URL + "", { headers: headers });
@@ -21,4 +31,6 @@ const fetch = (jwt) => {
 export default {
   fetch,
   create,
+  getProject,
+  runQuery
 };
