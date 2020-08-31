@@ -39,7 +39,7 @@ export default function ProjectHome(props) {
           {listCompanies(project.ProjectParticipants)}
           <hr></hr>
           {/* <ProjectTable /> */}
-          <ProjectSheet project={project} />
+          <ProjectSheet project={project} jwt={state.jwt} />
         </div>
       )}
     </div>
