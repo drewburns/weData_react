@@ -5,11 +5,6 @@ import projectService from "../../services/projectService";
 import QueryForm from "./QueryForm";
 import tableService from "../../services/tableService";
 
-// const data = [
-//   { shipmentID: 1, arrivalDate: "June 3,2020 4:40PM EST", port: "Los Angeles" },
-//   { shipmentID: 2, arrivalDate: "June 3,2020 4:40PM EST", port: "Newark" },
-//   { shipmentID: 3, arrivalDate: "June 3,2020 4:40PM EST", port: "Busan" },
-// ];
 export default function ProjectSheet(props) {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -71,6 +66,16 @@ export default function ProjectSheet(props) {
     return { columnData, columnNames, additionalColumns };
   };
 
+  const deleteCol = (columnID) => {
+    console.log(columns);
+    const colIndex = columns.findIndex((c) => c.id === columnID);
+    console.log(columnID, colIndex);
+    if (colIndex !== -1) {
+      columns.splice(colIndex, 1);
+      setColumns(columns);
+    }
+  };
+
   const generateAdditonalColumns = () => {
     if (!props.project.Query || !props.project.Query.Columns) {
       return;
@@ -79,7 +84,12 @@ export default function ProjectSheet(props) {
     props.project.Query.Columns.forEach((c) => {
       additonalColumns.push({
         title: () => {
-          return <span>{c.name}</span>;
+          return (
+            <span>
+              {c.name}
+              {/* <button onClick={() => deleteCol(c.id)}>Delete</button> */}
+            </span>
+          );
         },
         id: c.id,
         value: (row, { focus }) => {
@@ -102,12 +112,17 @@ export default function ProjectSheet(props) {
       return;
     }
     tableService
-      .newColumn(props.project.Query.id, newColName)
+      .newColumn(props.project.Query.id, newColName, props.jwt)
       .then((response) => {
         setColumns(
           columns.concat({
             title: () => {
-              return <span>{newColName}</span>;
+              return (
+                <span>
+                  {newColName}
+                  {/* <button>Delete</button> */}
+                </span>
+              );
             },
             id: response.data.id,
             value: (row, { focus }) => {
@@ -135,10 +150,7 @@ export default function ProjectSheet(props) {
       const theRowIndex = newData.findIndex(
         (r) => r[pKey].toString() === point.p_key_value
       );
-      // detheRowIndex);
-      // Object.assign(newData[theRowIndex], { [point.column_id]: point.value });
       newData[theRowIndex][point.column_id] = point.value;
-      // defaultData[column_id.toString()] =
     });
     return newData;
   };
@@ -188,18 +200,18 @@ export default function ProjectSheet(props) {
   };
   return (
     <div style={{ marginBottom: 40 }}>
-      <QueryForm project={props.project} />
+      <QueryForm project={props.project} jwt={props.jwt} />
       {rows.length > 0 && (
         <div>
           <Grid
             ref={gridRef}
             columns={columns}
             rowHeight={60}
-            rows={rows} // <== HERE IT LOADS ROWS FINE
-            // disabledCellChecker={(row, columnId) => {
-            //   // console.log(columnId);
-            //   return apiColumns.includes(columnId);
-            // }}
+            rows={rows}
+            disabledCellChecker={(row, columnId) => {
+              // console.log(columnId);
+              return apiColumns.includes(columnId);
+            }}
             // isColumnsResizable
             // focusOnSingleClick
             getRowKey={(row) => row[props.project.Query.p_key]}

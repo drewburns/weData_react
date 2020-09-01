@@ -2,14 +2,19 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080/table/";
 
-const upsertQuery = (query_id, name, p_key, link, project_id) => {
-  return axios.post(API_URL + "upsertQuery", {
-    query_id,
-    name,
-    p_key,
-    link,
-    project_id,
-  });
+const upsertQuery = (query_id, name, p_key, link, project_id, jwt) => {
+  const headers = { Authorization: "bearer " + jwt };
+  return axios.post(
+    API_URL + "upsertQuery",
+    {
+      query_id,
+      name,
+      p_key,
+      link,
+      project_id,
+    },
+    { headers: headers }
+  );
 };
 
 const newColumn = (query_id, name, jwt) => {

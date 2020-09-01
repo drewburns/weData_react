@@ -53,7 +53,7 @@ const Login = (props) => {
             currentUserID: response.data.user.id,
           });
           localStorage.setItem("id_token", response.data.token);
-          props.history.push("/dashboard");
+          props.history.push("/");
           console.log("logged in!");
           // window.location.reload();
         })

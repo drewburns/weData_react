@@ -6,6 +6,7 @@ import CheckButton from "react-validation/build/button";
 import CompanyService from "../services/companyService";
 import { GlobalContext } from "../utility/GlobalContext";
 import CompanyOverview from "../containers/Home/CompanyOverview";
+import LandingPage from "./LandingPage";
 
 export default function Home() {
   const { state, setState } = useContext(GlobalContext);
@@ -99,11 +100,7 @@ export default function Home() {
   //   );
   // }
   if (!state.jwt) {
-    return (
-      <div>
-        <h1>Gotta log in</h1>
-      </div>
-    );
+    return <LandingPage />;
   }
   return (
     <div>

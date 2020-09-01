@@ -26,7 +26,7 @@ export default function QueryForm(props) {
     const query_id = props.project.Query ? props.project.Query.id : null;
     const name = "query";
     tableService
-      .upsertQuery(query_id, name, pKey, link, props.project.id)
+      .upsertQuery(query_id, name, pKey, link, props.project.id, props.jwt)
       .then((response) => {
         // TODO: make this refresh the project page maybe idk.
         console.log(response);
