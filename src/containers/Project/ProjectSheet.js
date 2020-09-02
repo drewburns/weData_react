@@ -247,9 +247,9 @@ export default function ProjectSheet(props) {
             getRowKey={(row) => row[props.project.Query.p_key]}
           />
           <hr></hr>
-          <QueryForm project={props.project} jwt={props.jwt} />
         </div>
       )}
+      <QueryForm project={props.project} jwt={props.jwt} />
     </div>
   );
 }
