@@ -26,8 +26,10 @@ export default function ProjectSheet(props) {
       .upsertDataPoint(row[pKey], value, field, props.jwt)
       .then((response) => {
         // console.log("update: ", rows);
-        rows[theRowIndex][field] = value;
-        setRows(rows);
+        const newRows = [...rows];
+        newRows[theRowIndex][field] = value;
+        setRows(newRows);
+        // gridRef.current.focusCell({ x: 0, y: 0 });
       })
       .catch((err) => {
         console.log(err);

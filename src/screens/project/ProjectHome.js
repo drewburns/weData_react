@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import projectService from "../../services/projectService";
 import { GlobalContext } from "../../utility/GlobalContext";
-import ProjectTable from "../../containers/Project/ProjectTable";
 import ProjectSheet from "../../containers/Project/ProjectSheet";
 import { Button } from "@material-ui/core";
 
@@ -54,7 +53,6 @@ export default function ProjectHome(props) {
           {/* <h4>Companies:</h4> */}
           {listCompanies(project.ProjectParticipants)}
           <hr></hr>
-          {/* <ProjectTable /> */}
           <ProjectSheet project={project} jwt={state.jwt} />
         </div>
       )}
