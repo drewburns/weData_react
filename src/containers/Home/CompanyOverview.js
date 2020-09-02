@@ -95,7 +95,7 @@ export default function CompanyOverview(props) {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={8} lg={9}>
-              <h4>{props.company.name}</h4>
+              <h3>{props.company.name}</h3>
               {showTab === "Projects" && (
                 <CompanyProjects jwt={props.jwt} projects={projects} />
               )}
@@ -104,6 +104,8 @@ export default function CompanyOverview(props) {
               )}
               {showTab === "NewProject" && (
                 <CreateProject
+                  setShowTab={setShowTab}
+                  refreshProjects={refreshProjects}
                   jwt={props.jwt}
                   fetchProjects={refreshProjects}
                 />

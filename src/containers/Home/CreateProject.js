@@ -37,6 +37,8 @@ export default function CreateProject(props) {
         // props.fetch
         props.fetchProjects();
         setLoading(false);
+        props.refreshProjects();
+        props.setShowTab("Projects");
       })
       .catch((error) => {
         // TODO: do something
@@ -56,7 +58,7 @@ export default function CreateProject(props) {
   //   };
   return (
     <div>
-      <h3>Create Project</h3>
+      <h4>Create Project</h4>
       <Form onSubmit={createProject} ref={form}>
         <div className="form-group">
           <label htmlFor="username">Project Name</label>

@@ -4,6 +4,7 @@ import { Grid, Input as GridInput, Select } from "react-spreadsheet-grid";
 import projectService from "../../services/projectService";
 import QueryForm from "./QueryForm";
 import tableService from "../../services/tableService";
+import { TextField, Button } from "@material-ui/core";
 
 export default function ProjectSheet(props) {
   const [rows, setRows] = useState([]);
@@ -45,7 +46,7 @@ export default function ProjectSheet(props) {
         columnNames.push(key);
         columnData.push({
           title: () => {
-            return <span>{newKey}</span>;
+            return <span>{newKey} (from API)</span>;
           },
           id: newKey,
           value: (row, { focus }) => {
@@ -200,32 +201,51 @@ export default function ProjectSheet(props) {
   };
   return (
     <div style={{ marginBottom: 40 }}>
-      <QueryForm project={props.project} jwt={props.jwt} />
       {rows.length > 0 && (
         <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              marginBottom: 5,
+            }}
+          >
+            <TextField
+              variant="outlined"
+              size="small"
+              placeholder="New column name"
+              type="text"
+              // className="form-control"
+              style={{ width: 300, marginRight: 5 }}
+              name="query"
+              value={newColName}
+              onChange={onChangeNewColName}
+            />
+            <Button
+              size="small"
+              variant="contained"
+              // color="primary"
+              onClick={() => addColumn()}
+            >
+              Add Column
+            </Button>
+          </div>
           <Grid
             ref={gridRef}
             columns={columns}
             rowHeight={60}
             rows={rows}
-            disabledCellChecker={(row, columnId) => {
-              // console.log(columnId);
-              return apiColumns.includes(columnId);
-            }}
+            // disabledCellChecker={(row, columnId) => {
+            //   // console.log(columnId);
+            //   return apiColumns.includes(columnId);
+            // }}
             // isColumnsResizable
             // focusOnSingleClick
             getRowKey={(row) => row[props.project.Query.p_key]}
           />
           <hr></hr>
-          <input
-            type="text"
-            // className="form-control"
-            style={{ width: 300 }}
-            name="query"
-            value={newColName}
-            onChange={onChangeNewColName}
-          />
-          <button onClick={() => addColumn()}>Add Column</button>
+          <QueryForm project={props.project} jwt={props.jwt} />
         </div>
       )}
     </div>

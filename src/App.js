@@ -21,27 +21,39 @@ export default function App() {
   };
   return (
     <div>
-      <nav className="navbar navbar-expand navbar-dark bg-dark">
+      <nav
+        className="navbar navbar-expand navbar-dark"
+        style={{ backgroundColor: "#1976d2" }}
+      >
         <Link to={"/"} className="navbar-brand">
           WeData
         </Link>
-        <div className="navbar-nav mr-auto">
+        {/* <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"/"} className="nav-link">
+            <Link to={"/"} className="nav-link" style={{ color: "white" }}>
               Home
             </Link>
           </li>
-        </div>
+        </div> */}
 
         {state.currentUserID ? (
           <div className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link to={"/profile"} className="nav-link">
+              <Link
+                to={"/profile"}
+                className="nav-link"
+                style={{ color: "white" }}
+              >
                 Profile
               </Link>
             </li>
             <li className="nav-item">
-              <a href="/login" className="nav-link" onClick={logOut}>
+              <a
+                href="/login"
+                className="nav-link"
+                onClick={logOut}
+                style={{ color: "white" }}
+              >
                 LogOut
               </a>
             </li>
@@ -49,13 +61,21 @@ export default function App() {
         ) : (
           <div className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link to={"/login"} className="nav-link">
+              <Link
+                to={"/login"}
+                className="nav-link"
+                style={{ color: "white" }}
+              >
                 Login
               </Link>
             </li>
 
             <li className="nav-item">
-              <Link to={"/signup"} className="nav-link">
+              <Link
+                to={"/signup"}
+                className="nav-link"
+                style={{ color: "white" }}
+              >
                 Sign Up
               </Link>
             </li>
@@ -72,7 +92,7 @@ export default function App() {
             path="/dashboard"
             component={Dashboard}
           />
-          <ProtectedRoute path="/project/:id" component={ProjectHome}/>
+          <ProtectedRoute path="/project/:id" component={ProjectHome} />
           {/* <ProtectedRoute component={Dashboard} /> */}
         </Switch>
       </div>
