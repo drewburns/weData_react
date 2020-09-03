@@ -18,11 +18,6 @@ import HomeHeader from './containers/HomeHeader';
 import Collapse from '@material-ui/core/Collapse';
 import Alert from '@material-ui/lab/Alert';
 
-import DashboardHeader from './containers/DashboardHeader';
-import HomeHeader from './containers/HomeHeader';
-
-import Collapse from '@material-ui/core/Collapse';
-import Alert from '@material-ui/lab/Alert';
 
 export default function App() {
   const { state, setState } = useContext(GlobalContext);
