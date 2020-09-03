@@ -1,6 +1,8 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:8080/table/";
+import config from './config';
+const env = process.env.NODE_ENV || 'development';
+const stage = config[env];
+const API_URL = stage.base_url+"/table/";
 
 const upsertQuery = (query_id, name, p_key, link, project_id, jwt) => {
   const headers = { Authorization: "bearer " + jwt };

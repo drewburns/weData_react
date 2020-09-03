@@ -1,6 +1,8 @@
 import axios from "axios";
-
-const API_URL = "http://localhost:8080/project/";
+import config from './config';
+const env = process.env.NODE_ENV || 'development';
+const stage = config[env];
+const API_URL = stage.base_url+"/project/";
 
 const create = (name, company_ids, jwt) => {
   const headers = { Authorization: "bearer " + jwt };

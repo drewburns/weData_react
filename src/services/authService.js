@@ -1,6 +1,10 @@
 import axios from "axios";
+import config from './config';
 
-const API_URL = "http://localhost:8080/auth/";
+const env = process.env.NODE_ENV || 'development';
+const stage = config[env];
+console.log(stage)
+const API_URL = stage.base_url+"/auth/";
 
 const signup = (email, password) => {
   return axios.post(API_URL + "signup", {
