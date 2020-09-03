@@ -49,7 +49,7 @@ export default function App() {
             </li>
             <li className="nav-item">
               <a
-                href="/login"
+                href="/"
                 className="nav-link"
                 onClick={logOut}
                 style={{ color: "white" }}

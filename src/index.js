@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Route, BrowserRouter, Switch } from "react-router-dom";
+import { Route, BrowserRouter, Switch, HashRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { GlobalContextProvider } from "./utility/GlobalContext";
@@ -8,11 +8,11 @@ import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter basename="/">
     <GlobalContextProvider>
       <App />
     </GlobalContextProvider>
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById("root")
 );
 
