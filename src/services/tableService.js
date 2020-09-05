@@ -1,8 +1,8 @@
 import axios from "axios";
-import config from './config';
-const env = process.env.NODE_ENV || 'development';
+import config from "./config";
+const env = process.env.NODE_ENV || "development";
 const stage = config[env];
-const API_URL = stage.base_url+"/table/";
+const API_URL = stage.base_url + "/table/";
 
 const upsertQuery = (query_id, name, p_key, link, project_id, jwt) => {
   const headers = { Authorization: "bearer " + jwt };
@@ -55,9 +55,19 @@ const dataForPKeysColumns = (pKeyValues, columnIds, jwt) => {
   );
 };
 
+const toggleHideColumn = (queryID, colName, jwt) => {
+  const headers = { Authorization: "bearer " + jwt };
+  return axios.post(
+    API_URL + `toggleHideColumn`,
+    { queryID, colName },
+    { headers: headers }
+  );
+};
+
 export default {
   upsertQuery,
   newColumn,
   upsertDataPoint,
   dataForPKeysColumns,
+  toggleHideColumn,
 };

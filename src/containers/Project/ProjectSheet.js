@@ -1,10 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import { Grid, Input as GridInput, Select } from "react-spreadsheet-grid";
+import {
+  Grid as Spreadsheet,
+  Input as GridInput,
+  Select,
+} from "react-spreadsheet-grid";
 import projectService from "../../services/projectService";
 import QueryForm from "./QueryForm";
 import tableService from "../../services/tableService";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Grid } from "@material-ui/core";
+import SelectColumns from "./SelectColumns";
+
+var _ = require("lodash");
 
 export default function ProjectSheet(props) {
   const [rows, setRows] = useState([]);
@@ -12,6 +19,7 @@ export default function ProjectSheet(props) {
   const [apiColumns, setApiColumns] = useState([]);
   const [newColName, setNewColName] = useState("");
   const [rawRowData, setRawRowData] = useState(null);
+  const [hideCols, setHideCols] = useState([]);
   const [userEntryColumnNames, setUserEntryColumnNames] = useState([]);
 
   const gridRef = useRef();
@@ -94,7 +102,7 @@ export default function ProjectSheet(props) {
             </span>
           );
         },
-        id: c.id,
+        id: c.id.toString(),
         value: (row, { focus }) => {
           return (
             <GridInput
@@ -127,7 +135,8 @@ export default function ProjectSheet(props) {
                 </span>
               );
             },
-            id: response.data.id,
+            name: newColName,
+            id: response.data.id.toString(),
             value: (row, { focus }) => {
               return (
                 <GridInput
@@ -163,6 +172,7 @@ export default function ProjectSheet(props) {
     if (!props.project.Query) {
       return;
     }
+
     const pKey = props.project.Query.p_key;
     projectService
       .runQuery(props.project.Query.link, props.jwt)
@@ -194,6 +204,16 @@ export default function ProjectSheet(props) {
 
       setColumns(columnData.concat(additionalColumns));
       setApiColumns(columnNames);
+      const hiddens_cols = props.project.Query.hidden_columns;
+      if (!hiddens_cols) {
+        setHideCols([]);
+      } else {
+        var colArray = [];
+        hiddens_cols
+          .split(",")
+          .forEach((i) => colArray.push({ id: i.toString() }));
+        setHideCols(colArray);
+      }
     }
   }, [rawRowData, rows]);
 
@@ -201,6 +221,7 @@ export default function ProjectSheet(props) {
     const name = e.target.value;
     setNewColName(name);
   };
+
   return (
     <div style={{ marginBottom: 40 }}>
       {rows.length > 0 && (
@@ -233,19 +254,35 @@ export default function ProjectSheet(props) {
               Add Column
             </Button>
           </div>
-          <Grid
-            ref={gridRef}
-            columns={columns}
-            rowHeight={60}
-            rows={rows}
-            // disabledCellChecker={(row, columnId) => {
-            //   // console.log(columnId);
-            //   return apiColumns.includes(columnId);
-            // }}
-            // isColumnsResizable
-            // focusOnSingleClick
-            getRowKey={(row) => row[props.project.Query.p_key]}
-          />
+
+          <Grid container>
+            <Grid item xs={3}>
+              <SelectColumns
+                columns={columns}
+                hideCols={hideCols}
+                setHideCols={setHideCols}
+                project={props.project}
+                jwt={props.jwt}
+              />
+            </Grid>
+            <Grid item xs={9}>
+              {columns && (
+                <Spreadsheet
+                  ref={gridRef}
+                  columns={_.differenceBy(columns, hideCols, "id")}
+                  rowHeight={60}
+                  rows={rows}
+                  // disabledCellChecker={(row, columnId) => {
+                  //   // console.log(columnId);
+                  //   return apiColumns.includes(columnId);
+                  // }}
+                  // isColumnsResizable
+                  // focusOnSingleClick
+                  getRowKey={(row) => row[props.project.Query.p_key]}
+                />
+              )}
+            </Grid>
+          </Grid>
           <hr></hr>
         </div>
       )}
