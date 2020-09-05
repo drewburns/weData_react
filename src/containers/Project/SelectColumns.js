@@ -1,7 +1,9 @@
 import React from "react";
 import tableService from "../../services/tableService";
+import { Grid, Checkbox } from "@material-ui/core";
 
 export default function SelectColumns(props) {
+  const pKey = props.project.Query.p_key;
   const updateHideCols = (e) => {
     const colID = e.target.name;
     const index = props.hideCols.findIndex((c) => c.id === colID);
@@ -31,18 +33,18 @@ export default function SelectColumns(props) {
   };
 
   const listItems = props.columns.map((c) => (
-    <div>
-      <label>
-        {c.id !== props.project.Query.p_key && (
-          <input
-            name={c.id}
-            type="checkbox"
-            checked={isChecked(c)}
-            onChange={updateHideCols}
-          />
-        )}
-        {c.title()}
-      </label>
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ paddingTop: 5, marginLeft: -7 }}>
+        <Checkbox
+          name={c.id}
+          color="primary"
+          disabled={c.id === pKey}
+          checked={isChecked(c)}
+          onChange={updateHideCols}
+        />
+      </div>
+
+      <div>{c.title()}</div>
     </div>
   ));
   return (

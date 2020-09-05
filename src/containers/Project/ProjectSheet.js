@@ -8,7 +8,15 @@ import {
 import projectService from "../../services/projectService";
 import QueryForm from "./QueryForm";
 import tableService from "../../services/tableService";
-import { TextField, Button, Grid } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Grid,
+  MenuItem,
+  Menu,
+  IconButton,
+} from "@material-ui/core";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SelectColumns from "./SelectColumns";
 
 var _ = require("lodash");
@@ -21,6 +29,7 @@ export default function ProjectSheet(props) {
   const [rawRowData, setRawRowData] = useState(null);
   const [hideCols, setHideCols] = useState([]);
   const [userEntryColumnNames, setUserEntryColumnNames] = useState([]);
+  const [openColMenu, setOpenColMenu] = useState({});
 
   const gridRef = useRef();
 
@@ -56,7 +65,19 @@ export default function ProjectSheet(props) {
         columnNames.push(key);
         columnData.push({
           title: () => {
-            return <span>{newKey} (from API)</span>;
+            return (
+              <Grid container>
+                <Grid item xs={8}>
+                  <p style={{ marginTop: 15 }}>{newKey}</p>
+                </Grid>
+                {/* <button onClick={() => deleteCol(c.id.toString())}>
+                    Delete
+                  </button> */}
+                <Grid item xs={4}>
+                  {colMenu(newKey, false)}
+                </Grid>
+              </Grid>
+            );
           },
           id: newKey,
           value: (row, { focus }) => {
@@ -77,14 +98,69 @@ export default function ProjectSheet(props) {
     return { columnData, columnNames, additionalColumns };
   };
 
-  const deleteCol = (columnID) => {
-    console.log(columns);
-    const colIndex = columns.findIndex((c) => c.id === columnID);
-    console.log(columnID, colIndex);
-    if (colIndex !== -1) {
-      columns.splice(colIndex, 1);
-      setColumns(columns);
-    }
+  const deleteCol = async (columnID) => {
+    // TODO: try not to refresh the whole page again
+
+    await tableService
+      .deleteColumn(columnID, props.jwt)
+      .then((response) => {
+        console.log(response.data);
+        // then run query for now
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const colMenu = (id, canDelete) => {
+    return (
+      <div>
+        <IconButton
+          // style={{height: 20}}
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          onClick={(e) => setOpenColMenu({ id, anchor: e.currentTarget })}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id="simple-menu"
+          keepMounted
+          anchorEl={openColMenu.anchor}
+          open={openColMenu.id === id.toString()}
+          onClose={() => setOpenColMenu({})}
+        >
+          <MenuItem
+            onClick={() => {
+              sortRows(id, "ASC");
+              setOpenColMenu({});
+            }}
+          >
+            Sort ASC
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              sortRows(id, "DESC");
+              setOpenColMenu({});
+            }}
+          >
+            Sort DESC
+          </MenuItem>
+          {canDelete && (
+            <MenuItem
+              onClick={() => {
+                deleteCol(id.toString());
+                setOpenColMenu({});
+              }}
+            >
+              Delete
+            </MenuItem>
+          )}
+        </Menu>
+      </div>
+    );
   };
 
   const generateAdditonalColumns = () => {
@@ -96,10 +172,17 @@ export default function ProjectSheet(props) {
       additonalColumns.push({
         title: () => {
           return (
-            <span>
-              {c.name}
-              {/* <button onClick={() => deleteCol(c.id)}>Delete</button> */}
-            </span>
+            <Grid container>
+              <Grid item xs={8}>
+                <p style={{ marginTop: 15 }}>{c.name}</p>
+              </Grid>
+              {/* <button onClick={() => deleteCol(c.id.toString())}>
+                  Delete
+                </button> */}
+              <Grid item xs={4}>
+                {colMenu(c.id.toString(), true)}
+              </Grid>
+            </Grid>
           );
         },
         id: c.id.toString(),
@@ -129,10 +212,17 @@ export default function ProjectSheet(props) {
           columns.concat({
             title: () => {
               return (
-                <span>
-                  {newColName}
-                  {/* <button>Delete</button> */}
-                </span>
+                <Grid container>
+                  <Grid item xs={8}>
+                    <p style={{ marginTop: 15 }}>{newColName}</p>
+                  </Grid>
+                  {/* <button onClick={() => deleteCol(c.id.toString())}>
+                    Delete
+                  </button> */}
+                  <Grid item xs={4}>
+                    {colMenu(response.data.id.toString(), true)}
+                  </Grid>
+                </Grid>
               );
             },
             name: newColName,
@@ -167,12 +257,7 @@ export default function ProjectSheet(props) {
     return newData;
   };
 
-  useEffect(() => {
-    // runQuery();
-    if (!props.project.Query) {
-      return;
-    }
-
+  const runQuery = () => {
     const pKey = props.project.Query.p_key;
     projectService
       .runQuery(props.project.Query.link, props.jwt)
@@ -191,6 +276,13 @@ export default function ProjectSheet(props) {
       .catch((err) => {
         console.log(err);
       });
+  };
+  useEffect(() => {
+    // runQuery();
+    if (!props.project.Query) {
+      return;
+    }
+    runQuery();
   }, []);
 
   useEffect(() => {
@@ -215,11 +307,22 @@ export default function ProjectSheet(props) {
         setHideCols(colArray);
       }
     }
-  }, [rawRowData, rows]);
+  }, [rawRowData, rows, openColMenu]);
 
   const onChangeNewColName = (e) => {
     const name = e.target.value;
     setNewColName(name);
+  };
+
+  const sortRows = (id, direction) => {
+    var rowCopy = [...rows];
+    console.log(rows);
+    rowCopy = _.sortBy(rowCopy, id);
+    if (direction === "ASC") {
+      setRawRowData(rowCopy.reverse());
+    } else {
+      setRawRowData(rowCopy);
+    }
   };
 
   return (
@@ -254,7 +357,6 @@ export default function ProjectSheet(props) {
               Add Column
             </Button>
           </div>
-
           <Grid container>
             <Grid item xs={3}>
               <SelectColumns

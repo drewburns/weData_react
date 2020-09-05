@@ -64,10 +64,20 @@ const toggleHideColumn = (queryID, colName, jwt) => {
   );
 };
 
+const deleteColumn = (colID, jwt) => {
+  const headers = { Authorization: "bearer " + jwt };
+  return axios.post(
+    API_URL + `deleteColumn`,
+    { column_id: colID },
+    { headers: headers }
+  );
+};
+
 export default {
   upsertQuery,
   newColumn,
   upsertDataPoint,
   dataForPKeysColumns,
   toggleHideColumn,
+  deleteColumn,
 };
