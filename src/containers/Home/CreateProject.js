@@ -4,11 +4,16 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import projectService from "../../services/projectService";
 import AddCompanies from "./AddCompanies";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import templateService from "../../services/templateService";
 
 export default function CreateProject(props) {
   const [loading, setLoading] = useState(false);
   const [companyTags, setCompanyTags] = useState([]);
   const [projectName, setProjectName] = useState("");
+  const [templates, setTemplates] = useState([]);
+  const [templateValue, setTemplateValue] = useState({});
   //   const [tags, setTags] = useState([]);
   const form = useRef();
   const checkBtn = useRef();
@@ -23,6 +28,21 @@ export default function CreateProject(props) {
     }
   };
 
+  const fetchTemplates = () => {
+    templateService
+      .fetch(props.jwt)
+      .then((response) => {
+        setTemplates(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchTemplates();
+  }, []);
+
   const createProject = (e) => {
     e.preventDefault();
     const companyIds = companyTags.map((c) => c.id);
@@ -32,7 +52,7 @@ export default function CreateProject(props) {
     setLoading(true);
     form.current.validateAll();
     projectService
-      .create(projectName, companyIds, props.jwt)
+      .create(projectName, companyIds, templateValue, props.jwt)
       .then((response) => {
         // props.fetch
         props.fetchProjects();
@@ -79,14 +99,43 @@ export default function CreateProject(props) {
             setTags={setCompanyTags}
             jwt={props.jwt}
           />
-          {/* <Input
-            type="text"
-            className="form-control"
-            name="companyIds"
-            value={companyIds}
-            onChange={onChangeCompanyIds}
-            validations={[required]}
-          /> */}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="template">Template</label>
+          <Autocomplete
+            id="combo-box-demo"
+            options={templates}
+            getOptionLabel={(template) => template.name}
+            renderOption={(template) => (
+              <div>
+                <div>
+                  <span>{template.name}:</span>
+                </div>
+                <div>
+                  <span style={{ fontStyle: "italic", fontSize: 12 }}>
+                    {template.description}
+                  </span>
+                </div>
+              </div>
+            )}
+            value={templateValue}
+            onChange={(event, newValue) => {
+              setTemplateValue(newValue);
+            }}
+            // inputValue={inputValue}
+            // onInputChange={(event, newInputValue) => {
+            //   setInputValue(newInputValue);
+            // }}
+            style={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Select Template"
+                variant="outlined"
+              />
+            )}
+          />
         </div>
 
         <div className="form-group">
