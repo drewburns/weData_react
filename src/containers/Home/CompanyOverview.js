@@ -16,10 +16,13 @@ import PeopleIcon from "@material-ui/icons/People";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+
+import BuildIcon from "@material-ui/icons/Build";
 // styles
 import dashboardStyles from "../../styles/dashboard-styles";
 import CompanyProjects from "./CompanyProjects";
 import CreateProject from "./CreateProject";
+import ListTemplates from "./Templates/ListTemplates";
 
 export default function CompanyOverview(props) {
   const classes = dashboardStyles();
@@ -88,6 +91,12 @@ export default function CompanyOverview(props) {
             </ListItemIcon>
             <ListItemText primary="New Project" />
           </ListItem>
+          <ListItem button onClick={() => setShowTab("Templates")}>
+            <ListItemIcon>
+              <BuildIcon />
+            </ListItemIcon>
+            <ListItemText primary="Templates" />
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -109,6 +118,10 @@ export default function CompanyOverview(props) {
                   jwt={props.jwt}
                   fetchProjects={refreshProjects}
                 />
+              )}
+
+              {showTab === "Templates" && (
+                <ListTemplates jwt={props.jwt} company={props.company} />
               )}
             </Grid>
           </Grid>

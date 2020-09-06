@@ -2,37 +2,28 @@ import axios from "axios";
 import config from "./config";
 const env = process.env.NODE_ENV || "development";
 const stage = config[env];
-const API_URL = stage.base_url + "/project/";
+const API_URL = stage.base_url + "/template/";
 
-const create = (name, company_ids, template, jwt) => {
+const create = (name, description, link, primaryKey, jwt) => {
   const headers = { Authorization: "bearer " + jwt };
   return axios.post(
     API_URL + "create",
     {
       name,
-      company_ids,
-      template_id: template.id,
+      description,
+      link,
+      primary_key: primaryKey
     },
     { headers: headers }
   );
-};
-
-const runQuery = (route) => {
-  return axios.get(route);
-};
-
-const getProject = (id, jwt) => {
-  const headers = { Authorization: "bearer " + jwt };
-  return axios.get(API_URL + id, { headers: headers });
 };
 
 const fetch = (jwt) => {
   const headers = { Authorization: "bearer " + jwt };
   return axios.get(API_URL + "", { headers: headers });
 };
+
 export default {
-  fetch,
   create,
-  getProject,
-  runQuery,
+  fetch,
 };
