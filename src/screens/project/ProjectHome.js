@@ -2,7 +2,8 @@ import React, { useEffect, useContext, useState } from "react";
 import projectService from "../../services/projectService";
 import { GlobalContext } from "../../utility/GlobalContext";
 import ProjectSheet from "../../containers/Project/ProjectSheet";
-import { Button } from "@material-ui/core";
+import { Button, IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import { withStyles } from "@material-ui/core/styles";
 import { blue } from "@material-ui/core/colors";
@@ -37,6 +38,12 @@ export default function ProjectHome(props) {
       });
   };
 
+  // const deleteProject = () => {
+  //   if (window.confirm("Delete the project?")) {
+  //     // this.removeToCollection(11);
+
+  //   }
+  // }
   const listCompanies = (participants) => {
     return participants.map((prt) => (
       <li style={{ display: "inline", marginLeft: 10 }} key={prt.Company.id}>
@@ -49,7 +56,16 @@ export default function ProjectHome(props) {
       {/* <h1>ProjectID: {props.params.id}</h1> */}
       {project && (
         <div>
-          <h3>Project: {project.name}</h3>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <h3>Project: {project.name}</h3>
+            {/* <IconButton
+              color="primary"
+              style={{ marginLeft: 10, marginTop: -5 }}
+              onClick={deleteProject}
+            >
+              <DeleteIcon />
+            </IconButton> */}
+          </div>
           {/* <h4>Companies:</h4> */}
           {listCompanies(project.ProjectParticipants)}
           <hr></hr>

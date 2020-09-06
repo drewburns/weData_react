@@ -51,6 +51,13 @@ export default function CompanyProjects(props) {
   ));
   return (
     <div>
+      <Button
+        variant="contained"
+        onClick={() => props.setShowTab("NewProject")}
+      >
+        Create a new project
+      </Button>
+      <hr></hr>
       <h4>Projects</h4>
       <Grid container spacing={3}>
         {listProjects}

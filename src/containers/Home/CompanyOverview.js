@@ -73,6 +73,12 @@ export default function CompanyOverview(props) {
         </div>
         <Divider />
         <List>
+          <ListItem button onClick={() => setShowTab("NewProject")}>
+            <ListItemIcon>
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="New Project" />
+          </ListItem>
           <ListItem button onClick={() => setShowTab("Projects")}>
             <ListItemIcon>
               <DashboardIcon />
@@ -84,12 +90,6 @@ export default function CompanyOverview(props) {
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Team" />
-          </ListItem>
-          <ListItem button onClick={() => setShowTab("NewProject")}>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="New Project" />
           </ListItem>
           <ListItem button onClick={() => setShowTab("Templates")}>
             <ListItemIcon>
@@ -106,7 +106,11 @@ export default function CompanyOverview(props) {
             <Grid item xs={12} md={8} lg={9}>
               <h3>{props.company.name}</h3>
               {showTab === "Projects" && (
-                <CompanyProjects jwt={props.jwt} projects={projects} />
+                <CompanyProjects
+                  jwt={props.jwt}
+                  projects={projects}
+                  setShowTab={setShowTab}
+                />
               )}
               {showTab === "Team" && (
                 <CompanyMembers jwt={props.jwt} company={props.company} />

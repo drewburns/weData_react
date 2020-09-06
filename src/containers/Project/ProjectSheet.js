@@ -397,7 +397,7 @@ export default function ProjectSheet(props) {
           <hr></hr>
         </div>
       )}
-      <QueryForm project={props.project} jwt={props.jwt} />
+      <QueryForm runQuery={runQuery} project={props.project} jwt={props.jwt} />
     </div>
   );
 }
