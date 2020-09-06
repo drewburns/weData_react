@@ -6,8 +6,9 @@ const stage = config[env];
 console.log(stage)
 const API_URL = stage.base_url+"/auth/";
 
-const signup = (email, password) => {
+const signup = (name, email, password) => {
   return axios.post(API_URL + "signup", {
+    name,
     email,
     password,
   });

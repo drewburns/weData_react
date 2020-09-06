@@ -35,7 +35,12 @@ export default function CompanyMembers(props) {
       );
     }
   };
-  const listItems = members.map((d) => <li key={d.id}>{d.email}</li>);
+  const listItems = members.map((d) => (
+    <li key={d.id}>
+      {d.name ? `${d.name}: ` : ""}
+      {d.email}
+    </li>
+  ));
 
   const onChangeEmail = (e) => {
     const email = e.target.value;

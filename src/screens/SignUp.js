@@ -25,8 +25,9 @@ const SignUp = (props) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [userName, setUserName] = useState("");
 
-  const onChangeUsername = (e) => {
+  const onChangeEmail = (e) => {
     const email = e.target.value;
     setEmail(email);
   };
@@ -34,6 +35,11 @@ const SignUp = (props) => {
   const onChangePassword = (e) => {
     const password = e.target.value;
     setPassword(password);
+  };
+
+  const onChangeUserName = (e) => {
+    const name = e.target.value;
+    setUserName(name);
   };
 
   const handleSignUp = (e) => {
@@ -45,7 +51,7 @@ const SignUp = (props) => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      AuthService.signup(email, password)
+      AuthService.signup(userName, email, password)
         .then((response) => {
           setState({
             user: response.data.user,
@@ -79,13 +85,24 @@ const SignUp = (props) => {
       <div className="card card-container">
         <Form onSubmit={handleSignUp} ref={form}>
           <div className="form-group">
+            <label htmlFor="username">Name</label>
+            <Input
+              type="text"
+              className="form-control"
+              name="userName"
+              value={userName}
+              onChange={onChangeUserName}
+              validations={[required]}
+            />
+          </div>
+          <div className="form-group">
             <label htmlFor="username">Email</label>
             <Input
               type="text"
               className="form-control"
               name="email"
               value={email}
-              onChange={onChangeUsername}
+              onChange={onChangeEmail}
               validations={[required]}
             />
           </div>

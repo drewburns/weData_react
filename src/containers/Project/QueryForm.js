@@ -46,9 +46,7 @@ export default function QueryForm(props) {
       <div style={{ display: "flex", marginBottom: 10 }}>
         <p style={{ marginTop: 10, marginRight: 8 }}>
           {link ? (
-            <span>
-              Loading: <span style={{ fontStyle: "italic" }}>{link}</span>
-            </span>
+            <span>{props.project.Query.name || "Custom query"}</span>
           ) : (
             `No query yet`
           )}

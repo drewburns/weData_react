@@ -208,36 +208,37 @@ export default function ProjectSheet(props) {
     tableService
       .newColumn(props.project.Query.id, newColName, props.jwt)
       .then((response) => {
-        setColumns(
-          columns.concat({
-            title: () => {
-              return (
-                <Grid container>
-                  <Grid item xs={8}>
-                    <p style={{ marginTop: 15 }}>{newColName}</p>
-                  </Grid>
-                  {/* <button onClick={() => deleteCol(c.id.toString())}>
-                    Delete
-                  </button> */}
-                  <Grid item xs={4}>
-                    {colMenu(response.data.id.toString(), true)}
-                  </Grid>
-                </Grid>
-              );
-            },
-            name: newColName,
-            id: response.data.id.toString(),
-            value: (row, { focus }) => {
-              return (
-                <GridInput
-                  value={row[newColName]}
-                  onChange={onFieldChange(row, response.data.id)}
-                  focus={focus}
-                />
-              );
-            },
-          })
-        );
+        window.location.reload();
+        // setColumns(
+        //   columns.concat({
+        //     title: () => {
+        //       return (
+        //         <Grid container>
+        //           <Grid item xs={8}>
+        //             <p style={{ marginTop: 15 }}>{newColName}</p>
+        //           </Grid>
+        //           {/* <button onClick={() => deleteCol(c.id.toString())}>
+        //             Delete
+        //           </button> */}
+        //           <Grid item xs={4}>
+        //             {colMenu(response.data.id.toString(), true)}
+        //           </Grid>
+        //         </Grid>
+        //       );
+        //     },
+        //     name: newColName,
+        //     id: response.data.id.toString(),
+        //     value: (row, { focus }) => {
+        //       return (
+        //         <GridInput
+        //           value={row[newColName]}
+        //           onChange={onFieldChange(row, response.data.id)}
+        //           focus={focus}
+        //         />
+        //       );
+        //     },
+        //   })
+        // );
       })
       .catch((err) => {
         console.log(err);
@@ -327,6 +328,14 @@ export default function ProjectSheet(props) {
 
   return (
     <div style={{ marginBottom: 40 }}>
+      <Button
+        // size="small"
+        variant="contained"
+        // color="primary"
+        onClick={() => runQuery()}
+      >
+        Refresh
+      </Button>
       {rows.length > 0 && (
         <div>
           <div
