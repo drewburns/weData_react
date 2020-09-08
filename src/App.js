@@ -23,10 +23,10 @@ export default function App() {
     <div>
       <nav
         className="navbar navbar-expand navbar-dark"
-        style={{ backgroundColor: "#1976d2" }}
+        style={{ backgroundColor: "#fff", color:"#0092e0" }}
       >
-        <Link to={"/"} className="navbar-brand">
-          WeData
+        <Link to={"/"} className="navbar-brand" style={{marginLeft: "13%", color: "#0092e0", fontWeight: "bold", fontSize: "32px"}}>
+          Quota
         </Link>
         {/* <div className="navbar-nav mr-auto">
           <li className="nav-item">
@@ -42,7 +42,7 @@ export default function App() {
               <Link
                 to={"/profile"}
                 className="nav-link"
-                style={{ color: "white" }}
+                style={{ color: "#0092e0" }}
               >
                 Profile
               </Link>
@@ -52,19 +52,19 @@ export default function App() {
                 href="/"
                 className="nav-link"
                 onClick={logOut}
-                style={{ color: "white" }}
+                style={{ color: "#0092e0" }}
               >
                 LogOut
               </a>
             </li>
           </div>
         ) : (
-          <div className="navbar-nav ml-auto">
+          <div className="navbar-nav ml-auto" style={{paddingRight: "15%"}}>
             <li className="nav-item">
               <Link
                 to={"/login"}
                 className="nav-link"
-                style={{ color: "white" }}
+                style={{ color: "#0092e0", fontSize: "17px", paddingRight: "25px" }}
               >
                 Login
               </Link>
@@ -74,9 +74,10 @@ export default function App() {
               <Link
                 to={"/signup"}
                 className="nav-link"
-                style={{ color: "white" }}
+                style={{ color: "#0092e0", fontSize: "17px" }}
+
               >
-                Sign Up
+                Sign up
               </Link>
             </li>
           </div>
