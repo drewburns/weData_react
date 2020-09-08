@@ -42,7 +42,7 @@ export default function App() {
               <Link
                 to={"/profile"}
                 className="nav-link"
-                style={{ color: "white" }}
+                style={{ color: "#0092e0" }}
               >
                 Profile
               </Link>
@@ -52,7 +52,7 @@ export default function App() {
                 href="/"
                 className="nav-link"
                 onClick={logOut}
-                style={{ color: "white" }}
+                style={{ color: "#0092e0" }}
               >
                 LogOut
               </a>
