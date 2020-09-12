@@ -16,6 +16,8 @@ import {
   IconButton,
   Popover,
 } from "@material-ui/core";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SelectColumns from "./SelectColumns";
 import NewColumn from "./NewColumn";
@@ -34,6 +36,7 @@ export default function ProjectSheet(props) {
   const [userEntryColumnNames, setUserEntryColumnNames] = useState([]);
   const [openColMenu, setOpenColMenu] = useState({});
   const [popoverContent, setPopoverContent] = useState(null);
+  const [showSelect, setShowSelect] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -295,17 +298,27 @@ export default function ProjectSheet(props) {
             popoverContent={popoverContent}
           />
           <NewColumn jwt={props.jwt} project={props.project} />
+          <IconButton
+            size="small"
+            // variant="contained"
+            onClick={() => setShowSelect(!showSelect)}
+          >
+            {showSelect ? "Close" : "Open"}
+            {showSelect ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
           <Grid container>
             <Grid item xs={3}>
-              <SelectColumns
-                columns={columns}
-                hideCols={hideCols}
-                setHideCols={setHideCols}
-                project={props.project}
-                jwt={props.jwt}
-              />
+              {showSelect && (
+                <SelectColumns
+                  columns={columns}
+                  hideCols={hideCols}
+                  setHideCols={setHideCols}
+                  project={props.project}
+                  jwt={props.jwt}
+                />
+              )}
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={showSelect ? 9 : 12}>
               {columns && (
                 <Spreadsheet
                   ref={gridRef}

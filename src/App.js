@@ -23,9 +23,18 @@ export default function App() {
     <div>
       <nav
         className="navbar navbar-expand navbar-dark"
-        style={{ backgroundColor: "#fff", color:"#0092e0" }}
+        style={{ backgroundColor: "#fff", color: "#0092e0" }}
       >
-        <Link to={"/"} className="navbar-brand" style={{marginLeft: "13%", color: "#0092e0", fontWeight: "bold", fontSize: "32px"}}>
+        <Link
+          to={"/"}
+          className="navbar-brand"
+          style={{
+            marginLeft: "5%",
+            color: "#0092e0",
+            fontWeight: "bold",
+            fontSize: "32px",
+          }}
+        >
           Quota
         </Link>
         {/* <div className="navbar-nav mr-auto">
@@ -59,12 +68,16 @@ export default function App() {
             </li>
           </div>
         ) : (
-          <div className="navbar-nav ml-auto" style={{paddingRight: "15%"}}>
+          <div className="navbar-nav ml-auto" style={{ paddingRight: "15%" }}>
             <li className="nav-item">
               <Link
                 to={"/login"}
                 className="nav-link"
-                style={{ color: "#0092e0", fontSize: "17px", paddingRight: "25px" }}
+                style={{
+                  color: "#0092e0",
+                  fontSize: "17px",
+                  paddingRight: "25px",
+                }}
               >
                 Login
               </Link>
@@ -75,7 +88,6 @@ export default function App() {
                 to={"/signup"}
                 className="nav-link"
                 style={{ color: "#0092e0", fontSize: "17px" }}
-
               >
                 Sign up
               </Link>
@@ -83,7 +95,7 @@ export default function App() {
           </div>
         )}
       </nav>
-      <div className="container mt-3">
+      <div className="container mt-3 col-lg-11">
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
