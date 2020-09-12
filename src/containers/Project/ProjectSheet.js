@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 
 import {
   Grid as Spreadsheet,
@@ -9,15 +9,19 @@ import projectService from "../../services/projectService";
 import QueryForm from "./QueryForm";
 import tableService from "../../services/tableService";
 import {
-  TextField,
   Button,
   Grid,
   MenuItem,
   Menu,
   IconButton,
+  Popover,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SelectColumns from "./SelectColumns";
+import NewColumn from "./NewColumn";
+import InfoPopover from "./InfoPopover";
+import { sortRows, mergeRowData } from "./dataHelpers";
+import { deleteCol } from "./sheetHelpers";
 
 var _ = require("lodash");
 
@@ -25,11 +29,23 @@ export default function ProjectSheet(props) {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
   const [apiColumns, setApiColumns] = useState([]);
-  const [newColName, setNewColName] = useState("");
   const [rawRowData, setRawRowData] = useState(null);
   const [hideCols, setHideCols] = useState([]);
   const [userEntryColumnNames, setUserEntryColumnNames] = useState([]);
   const [openColMenu, setOpenColMenu] = useState({});
+  const [popoverContent, setPopoverContent] = useState(null);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpenPopover = (event, value) => {
+    // alert("yolo!");
+    setAnchorEl(event.currentTarget);
+    setPopoverContent(value);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
 
   const gridRef = useRef();
 
@@ -81,7 +97,22 @@ export default function ProjectSheet(props) {
           },
           id: newKey,
           value: (row, { focus }) => {
-            // console.log("this: ", row[newKey]);
+            const isObject = typeof row[newKey] === "object";
+            const isArray = isObject && row[newKey].length > 0;
+            if (isObject) {
+              return (
+                <div onMouseEnter={(e) => handleOpenPopover(e, row[newKey])}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={(e) => handleOpenPopover(e, row[newKey])}
+                  >
+                    View Data
+                  </Button>
+                </div>
+              );
+            }
             return (
               <GridInput
                 value={row[newKey]}
@@ -96,21 +127,6 @@ export default function ProjectSheet(props) {
 
     const additionalColumns = generateAdditonalColumns();
     return { columnData, columnNames, additionalColumns };
-  };
-
-  const deleteCol = async (columnID) => {
-    // TODO: try not to refresh the whole page again
-
-    await tableService
-      .deleteColumn(columnID, props.jwt)
-      .then((response) => {
-        console.log(response.data);
-        // then run query for now
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   const colMenu = (id, canDelete) => {
@@ -134,7 +150,7 @@ export default function ProjectSheet(props) {
         >
           <MenuItem
             onClick={() => {
-              sortRows(id, "ASC");
+              sortRows(id, "ASC", rows, setRawRowData);
               setOpenColMenu({});
             }}
           >
@@ -142,7 +158,7 @@ export default function ProjectSheet(props) {
           </MenuItem>
           <MenuItem
             onClick={() => {
-              sortRows(id, "DESC");
+              sortRows(id, "DESC", rows, setRawRowData);
               setOpenColMenu({});
             }}
           >
@@ -151,7 +167,7 @@ export default function ProjectSheet(props) {
           {canDelete && (
             <MenuItem
               onClick={() => {
-                deleteCol(id.toString());
+                deleteCol(id.toString(), props.jwt);
                 setOpenColMenu({});
               }}
             >
@@ -201,63 +217,6 @@ export default function ProjectSheet(props) {
     return additonalColumns;
   };
 
-  const addColumn = () => {
-    if (!props.project.Query) {
-      return;
-    }
-    tableService
-      .newColumn(props.project.Query.id, newColName, props.jwt)
-      .then((response) => {
-        window.location.reload();
-        // setColumns(
-        //   columns.concat({
-        //     title: () => {
-        //       return (
-        //         <Grid container>
-        //           <Grid item xs={8}>
-        //             <p style={{ marginTop: 15 }}>{newColName}</p>
-        //           </Grid>
-        //           {/* <button onClick={() => deleteCol(c.id.toString())}>
-        //             Delete
-        //           </button> */}
-        //           <Grid item xs={4}>
-        //             {colMenu(response.data.id.toString(), true)}
-        //           </Grid>
-        //         </Grid>
-        //       );
-        //     },
-        //     name: newColName,
-        //     id: response.data.id.toString(),
-        //     value: (row, { focus }) => {
-        //       return (
-        //         <GridInput
-        //           value={row[newColName]}
-        //           onChange={onFieldChange(row, response.data.id)}
-        //           focus={focus}
-        //         />
-        //       );
-        //     },
-        //   })
-        // );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // TODO: not very effiecent
-  const mergeRowData = (defaultData, additonalData) => {
-    var newData = [...defaultData];
-    const pKey = props.project.Query.p_key;
-    additonalData.forEach((point) => {
-      const theRowIndex = newData.findIndex(
-        (r) => r[pKey].toString() === point.p_key_value
-      );
-      newData[theRowIndex][point.column_id] = point.value;
-    });
-    return newData;
-  };
-
   const runQuery = () => {
     const pKey = props.project.Query.p_key;
     projectService
@@ -269,7 +228,7 @@ export default function ProjectSheet(props) {
           .dataForPKeysColumns(pKeyValues, columnIDs, props.jwt)
           .then((res2) => {
             setUserEntryColumnNames(columnIDs);
-            const mergedData = mergeRowData(response.data, res2.data);
+            const mergedData = mergeRowData(response.data, res2.data, pKey);
             setRawRowData(mergedData);
             // gridRef.current.focusCell({ x: 0, y: 0 });
           });
@@ -310,22 +269,14 @@ export default function ProjectSheet(props) {
     }
   }, [rawRowData, rows, openColMenu]);
 
-  const onChangeNewColName = (e) => {
-    const name = e.target.value;
-    setNewColName(name);
+  const onColumnResize = (widthValues) => {
+    const newColumns = [].concat(columns);
+    Object.keys(widthValues).forEach((columnId) => {
+      const theColIndex = newColumns.findIndex((c) => c.id === columnId);
+      newColumns[theColIndex].width = widthValues[columnId];
+    });
+    setColumns(newColumns);
   };
-
-  const sortRows = (id, direction) => {
-    var rowCopy = [...rows];
-    console.log(rows);
-    rowCopy = _.sortBy(rowCopy, id);
-    if (direction === "ASC") {
-      setRawRowData(rowCopy.reverse());
-    } else {
-      setRawRowData(rowCopy);
-    }
-  };
-
   return (
     <div style={{ marginBottom: 40 }}>
       <Button
@@ -338,34 +289,12 @@ export default function ProjectSheet(props) {
       </Button>
       {rows.length > 0 && (
         <div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              marginBottom: 5,
-            }}
-          >
-            <TextField
-              variant="outlined"
-              size="small"
-              placeholder="New column name"
-              type="text"
-              // className="form-control"
-              style={{ width: 300, marginRight: 5 }}
-              name="query"
-              value={newColName}
-              onChange={onChangeNewColName}
-            />
-            <Button
-              size="small"
-              variant="contained"
-              // color="primary"
-              onClick={() => addColumn()}
-            >
-              Add Column
-            </Button>
-          </div>
+          <InfoPopover
+            anchorEl={anchorEl}
+            handleClosePopover={handleClosePopover}
+            popoverContent={popoverContent}
+          />
+          <NewColumn jwt={props.jwt} project={props.project} />
           <Grid container>
             <Grid item xs={3}>
               <SelectColumns
@@ -389,6 +318,8 @@ export default function ProjectSheet(props) {
                   // }}
                   // isColumnsResizable
                   // focusOnSingleClick
+                  isColumnsResizable
+                  onColumnResize={onColumnResize}
                   getRowKey={(row) => row[props.project.Query.p_key]}
                 />
               )}

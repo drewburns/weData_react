@@ -36,6 +36,7 @@ export default function QueryForm(props) {
         // TODO: make this refresh the project page maybe idk.
         console.log(response);
         setOpen(false);
+        props.runQuery();
       })
       .catch((err) => {
         console.log(err);
