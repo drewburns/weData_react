@@ -5,7 +5,7 @@ const config = {
         // base_url: "http://quotabackend-env.eba-pinm2tpq.us-east-2.elasticbeanstalk.com"
     },
     production: {
-        base_url: "http://nutritious-receipt.surge.sh/#"
+        base_url: "http://nutritious-receipt.surge.sh"
     }
 }
 export default config;
