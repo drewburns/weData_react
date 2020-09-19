@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@material-ui/core";
 import tableService from "../../services/tableService";
+import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function NewColumn(props) {
   const [newColName, setNewColName] = useState("");
@@ -10,6 +12,17 @@ export default function NewColumn(props) {
     setNewColName(name);
   };
   const addColumn = () => {
+    if (!props.jwt) {
+      toast.error("Error, must sign in.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
     if (!props.project.Query) {
       return;
     }

@@ -21,18 +21,33 @@ const runQuery = (route) => {
   return axios.get(route);
 };
 
-const getProject = (id, jwt) => {
+const getProject = (id, jwt, mode) => {
   const headers = { Authorization: "bearer " + jwt };
-  return axios.get(API_URL + id, { headers: headers });
+  return axios.get(API_URL + id + `?mode=${mode}`, { headers: headers });
+};
+
+const getProjectPublic = (id) => {
+  return axios.get(API_URL + "public/" + id);
 };
 
 const fetch = (jwt) => {
   const headers = { Authorization: "bearer " + jwt };
   return axios.get(API_URL + "", { headers: headers });
 };
+
+const toggleShareSettings = (id, jwt) => {
+  const headers = { Authorization: "bearer " + jwt };
+  return axios.post(
+    API_URL + "toggleShareSettings/" + id,
+    {},
+    { headers: headers }
+  );
+};
 export default {
   fetch,
   create,
   getProject,
   runQuery,
+  toggleShareSettings,
+  getProjectPublic
 };

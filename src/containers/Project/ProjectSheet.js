@@ -25,6 +25,8 @@ import InfoPopover from "./InfoPopover";
 import { sortRows, mergeRowData } from "./dataHelpers";
 import { deleteCol } from "./sheetHelpers";
 
+import { toast } from "react-toastify";
+
 var _ = require("lodash");
 
 export default function ProjectSheet(props) {
@@ -54,6 +56,18 @@ export default function ProjectSheet(props) {
 
   const onFieldChange = (row, field) => (value) => {
     // Find the row that is being changed
+
+    if (!props.jwt) {
+      toast.error("Error, must sign in.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
     const pKey = props.project.Query.p_key;
     const theRowIndex = rows.findIndex((r) => r[pKey] === row[pKey]);
     // console.log(theRow);
@@ -325,11 +339,11 @@ export default function ProjectSheet(props) {
                   columns={_.differenceBy(columns, hideCols, "id")}
                   rowHeight={60}
                   rows={rows}
+                  hasScroll
                   // disabledCellChecker={(row, columnId) => {
                   //   // console.log(columnId);
                   //   return apiColumns.includes(columnId);
                   // }}
-                  // isColumnsResizable
                   // focusOnSingleClick
                   isColumnsResizable
                   onColumnResize={onColumnResize}
@@ -341,7 +355,13 @@ export default function ProjectSheet(props) {
           <hr></hr>
         </div>
       )}
-      <QueryForm runQuery={runQuery} project={props.project} jwt={props.jwt} />
+      {props.mode === "edit" && (
+        <QueryForm
+          runQuery={runQuery}
+          project={props.project}
+          jwt={props.jwt}
+        />
+      )}
     </div>
   );
 }

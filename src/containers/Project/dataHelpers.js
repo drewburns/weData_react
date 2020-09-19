@@ -1,6 +1,6 @@
 var _ = require("lodash");
 
-const sortRows = (id, direction, rows, setRawRowData) => {
+export const sortRows = (id, direction, rows, setRawRowData) => {
   var rowCopy = [...rows];
   console.log(rows);
   rowCopy = _.sortBy(rowCopy, id);
@@ -11,7 +11,7 @@ const sortRows = (id, direction, rows, setRawRowData) => {
   }
 };
 
-const mergeRowData = (defaultData, additonalData, p_key) => {
+export const mergeRowData = (defaultData, additonalData, p_key) => {
   var newData = [...defaultData];
   const pKey = p_key;
   additonalData.forEach((point) => {
@@ -23,7 +23,3 @@ const mergeRowData = (defaultData, additonalData, p_key) => {
   return newData;
 };
 
-module.exports = {
-  sortRows,
-  mergeRowData,
-};

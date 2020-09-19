@@ -5,6 +5,7 @@ import { Grid, Checkbox } from "@material-ui/core";
 export default function SelectColumns(props) {
   const pKey = props.project.Query.p_key;
   const updateHideCols = (e) => {
+
     const colID = e.target.name;
     const index = props.hideCols.findIndex((c) => c.id === colID);
     if (index === -1) {
