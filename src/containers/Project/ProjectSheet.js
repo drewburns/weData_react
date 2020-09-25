@@ -239,6 +239,10 @@ export default function ProjectSheet(props) {
     projectService
       .runQuery(props.project.Query.link, props.jwt)
       .then((response) => {
+        if (!Array.isArray(response.data)) {
+          alert("This query must return an array only! It does not right now.")
+          return;
+        }
         const columnIDs = props.project.Query.Columns.map((c) => c.id);
         const pKeyValues = response.data.map((r) => r[pKey]);
         tableService
